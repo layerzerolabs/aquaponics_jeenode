@@ -1,4 +1,4 @@
-aquaponics_jeenode
+aquaponics-jeenode
 ==================
 
 Jeenode code for wireless aquaponics sensors
