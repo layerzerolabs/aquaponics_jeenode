@@ -1,5 +1,6 @@
 #include <JeeLib.h>
 #include "BatterySensor.h"
+#include "SHT11Sensor.h"
  
 int nodeId = 25;
 
@@ -9,10 +10,11 @@ int additionalDelay = 1000; // between each reading process
 int voltagePin = A1;
 int controlPin = 5;
 BatterySensor batterySensor(voltagePin, controlPin);
-BatterySensor batterySensor2(voltagePin, controlPin);
+SHT11Sensor sht11Sensor(voltagePin, controlPin);
 
-Sensor* sensors[] = {&batterySensor, &batterySensor2};
+Sensor* sensors[] = {&batterySensor, &sht11Sensor};
 
+// C way for getting size of array
 int numSensors = sizeof(sensors) / sizeof(sensors[0]);
 
 void setup() {
