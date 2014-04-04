@@ -1,25 +1,34 @@
 #include <JeeLib.h>
-#include "Sensor.cpp"
+#include "BatterySensor.h"
  
+int nodeId = 25;
 
 int additionalDelay = 1000; // between each reading process  
 
-Sensor batterySensor;
-Sensor battery2;
+// battery sensor
+int voltagePin = A1;
+int controlPin = 5;
+BatterySensor batterySensor(voltagePin, controlPin);
+BatterySensor batterySensor2(voltagePin, controlPin);
 
-Sensor sensors[] = {batterySensor, battery2};
+Sensor* sensors[] = {&batterySensor, &batterySensor2};
+
+int numSensors = sizeof(sensors) / sizeof(sensors[0]);
 
 void setup() {
-  for (int i = 0; i < sizeof(sensors); i ++) {
-    sensors[i].setup(); 
+  batterySensor.setup();
+  for (int i = 0; i < numSensors; i ++) {
+    sensors[i]->setup(); 
   }
   setupRadio();
   Serial.begin(9600);
 }
 
 void loop() {
-  for (int i = 0; i < sizeof(sensors); i ++) {
-    int reading = sensors[i].measure(); 
+  for (int i = 0; i < numSensors; i ++) {
+    int reading = sensors[i]->measure(); 
+    Serial.print(sensors[i]->getName());
+    Serial.print(": ");
     Serial.println(reading);
     sendRadio(reading);
   }
@@ -27,7 +36,7 @@ void loop() {
 }
 
 void setupRadio() {
-  rf12_initialize(25, RF12_868MHZ, 101);
+  rf12_initialize(nodeId, RF12_868MHZ, 101);
   rf12_easyInit(0);  
 }
 
