@@ -11,12 +11,14 @@ void BatterySensor::setup() {
   digitalWrite(this->controlPin, HIGH); // stops excess charge accumulating on cap
 }
 
-int BatterySensor::measure() {
+int* BatterySensor::measure() {
   digitalWrite(this->controlPin, LOW);
   delay(50); // settle period
   int reading = analogRead(this->voltagePin);
   digitalWrite(this->controlPin, HIGH);
-  return reading;
+  int readings[] = {reading};
+  Serial.println(reading);
+  return readings;
 }
 
 char* BatterySensor::getName() {
