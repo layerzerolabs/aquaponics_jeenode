@@ -16,7 +16,8 @@ int* BatterySensor::measure() {
   delay(50); // settle period
   int reading = analogRead(this->voltagePin);
   digitalWrite(this->controlPin, HIGH);
-  static int readings[1] = {reading}; // if not static, falls from scope
+  // if not static, falls from scope.
+  static int readings[2] = {reading};
   return readings;
 }
 

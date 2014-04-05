@@ -41,13 +41,16 @@ void loop() {
     int *readings = sensors[i]->measure(); 
     Serial.print(sensors[i]->getName());
     Serial.print(": ");
-    Serial.println(readings[0]);
+    // Readings array always has 2 elements
+    Serial.print(readings[0]);
+    Serial.print(" ");
+    Serial.println(readings[1]);
   }
   delay(additionalDelay);
 }
 
 void setupRadio() {
-  rf12_initialize(nodeId, RF12_868MHZ, 101);
+  rf12_initialize(nodeId, RF12_868MHZ, 101); // 101 = group id
   rf12_easyInit(0);  
 }
 
