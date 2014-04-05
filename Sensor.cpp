@@ -2,6 +2,6 @@
 
 Sensor::Sensor() {}
 void Sensor::setup() {}
-int Sensor::measure() {}
+int* Sensor::measure() {}
 char* Sensor::getName() {}
 

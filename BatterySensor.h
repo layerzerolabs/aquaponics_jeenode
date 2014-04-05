@@ -10,5 +10,5 @@ class BatterySensor : public Sensor {
     char* getName();
     BatterySensor(int voltagePin, int controlPin);
     void setup();
-    int measure();
+    int* measure();
 };

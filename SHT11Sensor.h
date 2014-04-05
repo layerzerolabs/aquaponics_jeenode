@@ -10,5 +10,5 @@ class SHT11Sensor : public Sensor {
     char* getName();
     SHT11Sensor(byte port);
     void setup();
-    int measure();
+    int* measure();
 };

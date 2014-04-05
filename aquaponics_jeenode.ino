@@ -38,10 +38,10 @@ void loop() {
   for (int i = 0; i < numSensors; i ++) {
     Serial.flush();
     delay(2);
-    int reading = sensors[i]->measure(); 
+    int *readings = sensors[i]->measure(); 
     Serial.print(sensors[i]->getName());
     Serial.print(": ");
-    Serial.println(reading);
+    Serial.println(readings[0]);
   }
   delay(additionalDelay);
 }
