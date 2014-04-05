@@ -12,11 +12,10 @@ void SHT11Sensor::setup() {
 }
 
 int SHT11Sensor::measure() {
-  SHT11 rsht11 = *(this->sht11);
-  rsht11.measure(SHT11::HUMI);
-  rsht11.measure(SHT11::TEMP);  
+  sht11->measure(SHT11::HUMI);
+  sht11->measure(SHT11::TEMP);  
   float h, t;
-  rsht11.calculate(h, t);
+  sht11->calculate(h, t);
   int humi = h + 0.5, temp = 10 * t + 0.5;
   int reading = humi;
   return reading;
