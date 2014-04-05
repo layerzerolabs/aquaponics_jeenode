@@ -4,16 +4,15 @@
 
 
 SHT11Sensor::SHT11Sensor(byte port) {
-  SHT11 sht11(port);
-  this->sht11 = &sht11;
+  sht11 = new SHT11(port);
 }
 
 void SHT11Sensor::setup() {
 
 }
 
-int* SHT11Sensor::measure() {
-  SHT11 rsht11 = *(sht11);
+int SHT11Sensor::measure() {
+  SHT11 rsht11 = *(this->sht11);
   rsht11.measure(SHT11::HUMI);
   rsht11.measure(SHT11::TEMP);  
   float h, t;

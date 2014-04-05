@@ -8,6 +8,6 @@ class Sensor {
     Sensor();
     virtual char* getName();
     virtual void setup();
-    virtual int* measure();
+    virtual int measure();
 };
 #endif

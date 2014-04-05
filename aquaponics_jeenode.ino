@@ -38,18 +38,10 @@ void loop() {
   for (int i = 0; i < numSensors; i ++) {
     Serial.flush();
     delay(2);
-    int *readings = sensors[i]->measure(); 
-    //Serial.print(sensors[i]->getName());
-    //Serial.print(": ");
-    int numReadings = sizeof(readings) / sizeof(readings[0]);
-    //Serial.println(numReadings);
-    //Serial.println(readings[0]);
-    //for (int j = 0; j < numReadings; j ++) {
-      //Serial.print(readings[j]);
-      //Serial.print(" ");
-    //sendRadio(reading);
-    //}
-    //Serial.println("");
+    int reading = sensors[i]->measure(); 
+    Serial.print(sensors[i]->getName());
+    Serial.print(": ");
+    Serial.println(reading);
   }
   delay(additionalDelay);
 }
