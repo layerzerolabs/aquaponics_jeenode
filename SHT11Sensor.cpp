@@ -17,8 +17,7 @@ int* SHT11Sensor::measure() {
   float h, t;
   sht11->calculate(h, t);
   int humi = h + 0.5, temp = 10 * t + 0.5;
-  int readings[2] = {humi, temp};
-    Serial.println(readings[0]);
+  static int readings[2] = {humi, temp};
   return readings;
 }
 
