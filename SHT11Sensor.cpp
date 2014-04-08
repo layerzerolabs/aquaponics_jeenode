@@ -3,8 +3,7 @@
 #include <util/atomic.h>
 
 
-SHT11Sensor::SHT11Sensor(byte port) {
-  
+SHT11Sensor::SHT11Sensor(byte port) {  
   sht11 = new SHT11(port);
 }
 

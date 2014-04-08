@@ -5,7 +5,7 @@
 class Sensor {
     
   public:
-    Sensor();
+    Sensor(byte port = 0);
     virtual char* getName();
     virtual void setup();
     virtual void measure(int*);

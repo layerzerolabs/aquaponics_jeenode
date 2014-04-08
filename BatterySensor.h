@@ -4,11 +4,10 @@ class BatterySensor : public Sensor {
   
  public:
     char* getName();
-    BatterySensor(int voltagePin, int controlPin);
+    BatterySensor(byte port);
     void setup();
     void measure(int* readings);
     
   private:
-    int voltagePin;
-    int controlPin;
+    Port * jeeport;
 };

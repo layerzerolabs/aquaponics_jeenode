@@ -2,20 +2,16 @@
 #include "BatterySensor.h"
 #include "SHT11Sensor.h" 
 
-int voltagePin = A1; // for battery
-int controlPin = 5;  // for battery
-byte port = 1;       // for SHT11
-
 /*****************************************************
   EDIT FOR DIFFERENT COMBINATIONS OF SENSORS
 *****************************************************/
-  
-BatterySensor batterySensor(voltagePin, controlPin);
-SHT11Sensor sht11Sensor(port);
+
+SHT11Sensor sht11Sensor(1); // jeeport 1
+BatterySensor batterySensor(2);
 
 Sensor* sensors[] = {
-  &batterySensor,
-  &sht11Sensor
+  &sht11Sensor,
+  &batterySensor
 };
 
 /*****************************************************/
@@ -24,18 +20,18 @@ int nodeId = 25;
 
 int payload[3]; // id and up to two readings
 
-int additionalDelay = 1000; // between each reading process 
+int additionalDelay = 3000; // between each reading process 
 ISR(WDT_vect) { Sleepy::watchdogEvent(); } // needed for power-down
 
 // C way for getting size of array
 int numSensors = sizeof(sensors) / sizeof(sensors[0]);
 
 void setup() {
+  Serial.begin(9600);
   for (int i = 0; i < numSensors; i ++) {
     sensors[i]->setup(); 
   }
   setupRadio();
-  Serial.begin(9600);
 }
 
 void loop() {

@@ -4,13 +4,11 @@
 class SHT11Sensor : public Sensor {
      
   public:
-    char* getName();
-    SHT11Sensor(byte port);
+    SHT11Sensor(byte);
     void setup();
+    char* getName();
     void measure(int* readings); // output parameter
     
   private:
-    byte port;
     SHT11* sht11;
-
 };
