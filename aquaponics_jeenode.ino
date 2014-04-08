@@ -22,7 +22,8 @@ Sensor* sensors[] = {
 
 int nodeId = 25;
 int additionalDelay = 1000; // between each reading process 
-int readings[2]; // two bytes per sensor
+
+int payload[3]; // id and up to two readings
 
 // C way for getting size of array
 int numSensors = sizeof(sensors) / sizeof(sensors[0]);
@@ -37,12 +38,14 @@ void setup() {
 
 void loop() {
   for (int i = 0; i < numSensors; i ++) {
-    sensors[i]->measure(readings); 
+    sensors[i]->measure(payload); 
     Serial.print(sensors[i]->getName());
     Serial.print(": ");
-    Serial.print(readings[0]);
+    Serial.print(payload[0]);
     Serial.print(" ");
-    Serial.println(readings[1]);
+    Serial.println(payload[1]);
+    Serial.print(" ");
+    Serial.println(payload[2]);
     sendRadio();
   }
   delay(additionalDelay);
@@ -55,5 +58,5 @@ void setupRadio() {
 
 void sendRadio() {
   rf12_easyPoll();
-  rf12_easySend(&readings, sizeof readings); 
+  rf12_easySend(&payload, sizeof payload); 
 }

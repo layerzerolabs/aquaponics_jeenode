@@ -13,12 +13,14 @@ void BatterySensor::setup() {
 
 void BatterySensor::measure(int * readings) {
   digitalWrite(this->controlPin, LOW);
-  readings[0] = analogRead(this->voltagePin);
+  readings[0] = 1; // sensor id
+  readings[1] = analogRead(this->voltagePin);
   digitalWrite(this->controlPin, HIGH);
-  readings[1] = 0; // pad
+  readings[2] = 0; // pad with 0 as no more data
 }
 
 char* BatterySensor::getName() {
   return "Battery";
 }
+
 
