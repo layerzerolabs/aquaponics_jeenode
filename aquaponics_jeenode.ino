@@ -21,9 +21,11 @@ Sensor* sensors[] = {
 /*****************************************************/
 
 int nodeId = 25;
-int additionalDelay = 1000; // between each reading process 
 
 int payload[3]; // id and up to two readings
+
+int additionalDelay = 1000; // between each reading process 
+ISR(WDT_vect) { Sleepy::watchdogEvent(); } // needed for power-down
 
 // C way for getting size of array
 int numSensors = sizeof(sensors) / sizeof(sensors[0]);
@@ -38,17 +40,19 @@ void setup() {
 
 void loop() {
   for (int i = 0; i < numSensors; i ++) {
-    sensors[i]->measure(payload); 
+    sensors[i]->measure(payload);
+    Serial.print("Sensor:");
     Serial.print(sensors[i]->getName());
-    Serial.print(": ");
+    Serial.print(" ID:");
     Serial.print(payload[0]);
-    Serial.print(" ");
-    Serial.println(payload[1]);
-    Serial.print(" ");
+    Serial.print(" DATA0:");
+    Serial.print(payload[1]);
+    Serial.print(" DATA1:");
     Serial.println(payload[2]);
     sendRadio();
   }
-  delay(additionalDelay);
+  Serial.flush();
+  Sleepy::loseSomeTime(additionalDelay);
 }
 
 void setupRadio() {
