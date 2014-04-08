@@ -11,14 +11,12 @@ void BatterySensor::setup() {
   digitalWrite(this->controlPin, HIGH); // stops excess charge accumulating on cap
 }
 
-int* BatterySensor::measure() {
+void BatterySensor::measure(int * readings) {
   digitalWrite(this->controlPin, LOW);
   delay(50); // settle period
-  int reading = analogRead(this->voltagePin);
+  readings[0] = analogRead(this->voltagePin);
   digitalWrite(this->controlPin, HIGH);
-  // if not static, falls from scope.
-  static int readings[2] = {reading};
-  return readings;
+  readings[1] = 0; // pad
 }
 
 char* BatterySensor::getName() {

@@ -22,6 +22,7 @@ Sensor* sensors[] = {
 
 int nodeId = 25;
 int additionalDelay = 1000; // between each reading process 
+int readings[2]; // two bytes per sensor
 
 // C way for getting size of array
 int numSensors = sizeof(sensors) / sizeof(sensors[0]);
@@ -38,10 +39,9 @@ void loop() {
   for (int i = 0; i < numSensors; i ++) {
     Serial.flush();
     delay(2);
-    int *readings = sensors[i]->measure(); 
+    sensors[i]->measure(readings); 
     Serial.print(sensors[i]->getName());
     Serial.print(": ");
-    // Readings array always has 2 elements
     Serial.print(readings[0]);
     Serial.print(" ");
     Serial.println(readings[1]);
