@@ -31,20 +31,19 @@ void setup() {
   for (int i = 0; i < numSensors; i ++) {
     sensors[i]->setup(); 
   }
-  //setupRadio();
+  setupRadio();
   Serial.begin(9600);
 }
 
 void loop() {
   for (int i = 0; i < numSensors; i ++) {
-    Serial.flush();
-    delay(2);
     sensors[i]->measure(readings); 
     Serial.print(sensors[i]->getName());
     Serial.print(": ");
     Serial.print(readings[0]);
     Serial.print(" ");
     Serial.println(readings[1]);
+    sendRadio();
   }
   delay(additionalDelay);
 }
@@ -54,7 +53,7 @@ void setupRadio() {
   rf12_easyInit(0);  
 }
 
-void sendRadio(int reading) {
+void sendRadio() {
   rf12_easyPoll();
-  rf12_easySend(&reading, sizeof reading); 
+  rf12_easySend(&readings, sizeof readings); 
 }

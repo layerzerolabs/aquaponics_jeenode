@@ -13,7 +13,6 @@ void BatterySensor::setup() {
 
 void BatterySensor::measure(int * readings) {
   digitalWrite(this->controlPin, LOW);
-  delay(50); // settle period
   readings[0] = analogRead(this->voltagePin);
   digitalWrite(this->controlPin, HIGH);
   readings[1] = 0; // pad
