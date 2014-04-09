@@ -1,12 +1,12 @@
 #include <JeeLib.h>
 #include "BatterySensor.h"
-#include "SHT11Sensor.h" 
+#include "TempHumiSensor.h" 
 
 /*****************************************************
   EDIT FOR DIFFERENT COMBINATIONS OF SENSORS
 *****************************************************/
 
-SHT11Sensor sht11Sensor(1); // jeeport 1
+TempHumiSensor sht11Sensor(1); // jeeport 1
 BatterySensor batterySensor(2);
 
 Sensor* sensors[] = {
