@@ -3,11 +3,11 @@
 
 LightSensor::LightSensor(byte port, int address) 
   // c++ initialise members in constructor
-  : jeeport(port), luxplug(jeeport, (byte)address){
-  luxplug.setGain(0); // Low gain
-}
+  : jeeport(port), luxplug(jeeport, (byte)address){}
 
-void LightSensor::setup() {
+void LightSensor::setup() {  
+  luxplug.begin();
+  luxplug.setGain(0); // Low gain
 }
 
 void LightSensor::measure(int * data) {
