@@ -3,6 +3,7 @@
 class BatterySensor : public Sensor {
   
  public:
+    static const int id = 1;
     char* getName();
     BatterySensor(byte port);
     void setup();

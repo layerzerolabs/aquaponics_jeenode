@@ -1,26 +1,30 @@
 #include <JeeLib.h>
 #include "BatterySensor.h"
 #include "TempHumiSensor.h" 
+#include "LightSensor.h"
 
 /*****************************************************
   EDIT FOR DIFFERENT COMBINATIONS OF SENSORS
 *****************************************************/
 
-TempHumiSensor sht11Sensor(1); // jeeport 1
+int nodeId = 26;
+
+//TempHumiSensor tempHumiSensor(1); // jeeport 1
 BatterySensor batterySensor(2);
+LightSensor lightSensor(1, 0x39); // jeeport and I2C address
 
 Sensor* sensors[] = {
-  &sht11Sensor,
-  &batterySensor
+  //&tempHumiSensor,
+  &batterySensor,
+  &lightSensor,
 };
+
+int additionalDelay = 3000; // between each reading process 
 
 /*****************************************************/
 
-int nodeId = 25;
-
 int payload[3]; // id and up to two readings
 
-int additionalDelay = 3000; // between each reading process 
 ISR(WDT_vect) { Sleepy::watchdogEvent(); } // needed for power-down
 
 // C way for getting size of array
@@ -41,9 +45,9 @@ void loop() {
     Serial.print(sensors[i]->getName());
     Serial.print(" ID:");
     Serial.print(payload[0]);
-    Serial.print(" DATA0:");
+    Serial.print(" READING0:");
     Serial.print(payload[1]);
-    Serial.print(" DATA1:");
+    Serial.print(" READING1:");
     Serial.println(payload[2]);
     sendRadio();
   }
