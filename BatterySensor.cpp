@@ -5,16 +5,16 @@ BatterySensor::BatterySensor(byte port) {
 }
 
 void BatterySensor::setup() {
+  jeeport->digiWrite(HIGH); // stops current leaking across
   jeeport->mode(OUTPUT);
   jeeport->mode2(INPUT);
-  jeeport->digiWrite(HIGH); // stops excess charge accumulating on cap
 }
 
 void BatterySensor::measure(int * data) {
   data[0] = id;
   jeeport->digiWrite(LOW);
   data[1] = jeeport->anaRead();
-  jeeport->digiWrite(HIGH);
+  jeeport->digiWrite(HIGH); // stops current leaking across
   data[2] = 0; // pad with 0 as no more data
 }
 

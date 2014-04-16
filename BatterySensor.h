@@ -10,5 +10,5 @@ class BatterySensor : public Sensor {
     void measure(int* readings);
     
   private:
-    Port * jeeport;
+    Port jeeport;
 };
