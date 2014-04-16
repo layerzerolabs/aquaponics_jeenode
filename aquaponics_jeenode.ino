@@ -10,7 +10,7 @@
 int nodeId = 26;
 
 //TempHumiSensor tempHumiSensor(1); // jeeport 1
-BatterySensor batterySensor(2);
+BatterySensor batterySensor(3);
 LightSensor lightSensor(1, 0x39); // jeeport and I2C address
 
 Sensor* sensors[] = {
