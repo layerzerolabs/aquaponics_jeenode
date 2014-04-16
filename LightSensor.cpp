@@ -6,15 +6,18 @@ LightSensor::LightSensor(byte port, int address)
   : jeeport(port), luxplug(jeeport, (byte)address){}
 
 void LightSensor::setup() {  
-  luxplug.begin();
-  luxplug.setGain(0); // Low gain
+
 }
 
 void LightSensor::measure(int * data) {
+  luxplug.begin();
+  luxplug.setGain(0); // Low gain 
+  delay(1000); // wait for power up
   luxplug.getData();
   data[0] = id;
   data[1] = luxplug.calcLux();
   data[2] = 0;
+  luxplug.poweroff(); // Power off when we've got the data.
 }
 
 char* LightSensor::getName() {
