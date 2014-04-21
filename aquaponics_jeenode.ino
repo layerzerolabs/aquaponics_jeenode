@@ -14,12 +14,14 @@ int nodeId = 26;
 
 //TempHumiSensor tempHumiSensor(1); // jeeport 1
 //BatterySensor batterySensor(3);
-LightSensor lightSensor(1, 0x39); // jeeport and I2C address
+//LightSensor lightSensor(1, 0x39); // jeeport and I2C address
+TempSensor tempSensor(2);
 
 Sensor* sensors[] = {
   //&tempHumiSensor,
   //&batterySensor,
-  &lightSensor,
+  //&lightSensor,
+  &tempSensor
 };
 
 int waitMillis = 3000; // between each reading process 
