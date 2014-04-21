@@ -4,6 +4,7 @@
 
 
 TempHumiSensor::TempHumiSensor(byte port): jeeport(port) {  
+  
 }
 
 void TempHumiSensor::setup() {

@@ -12,7 +12,7 @@ void LightSensor::setup() {
 void LightSensor::measure(int * data) {
   luxplug.begin();
   luxplug.setGain(0); // Low gain 
-  delay(1000); // wait for power up
+  Sleepy::loseSomeTime(700); // wait for power up
   luxplug.getData();
   data[0] = id;
   data[1] = luxplug.calcLux();

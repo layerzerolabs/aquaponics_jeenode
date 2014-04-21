@@ -10,16 +10,16 @@
 int nodeId = 26;
 
 //TempHumiSensor tempHumiSensor(1); // jeeport 1
-BatterySensor batterySensor(3);
+//BatterySensor batterySensor(3);
 LightSensor lightSensor(1, 0x39); // jeeport and I2C address
 
 Sensor* sensors[] = {
   //&tempHumiSensor,
-  &batterySensor,
+  //&batterySensor,
   &lightSensor,
 };
 
-int additionalDelay = 3000; // between each reading process 
+int additionalDelay = 10000; // between each reading process 
 
 /*****************************************************/
 
@@ -61,6 +61,8 @@ void setupRadio() {
 }
 
 void sendRadio() {
+  rf12_sleep(RF12_WAKEUP);
   rf12_easyPoll();
   rf12_easySend(&payload, sizeof payload); 
+  rf12_sleep(RF12_SLEEP);
 }
