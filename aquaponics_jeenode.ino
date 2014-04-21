@@ -19,7 +19,7 @@ Sensor* sensors[] = {
   &lightSensor,
 };
 
-int additionalDelay = 10000; // between each reading process 
+int waitMillis = 10000; // between each reading process 
 
 /*****************************************************/
 
@@ -52,17 +52,16 @@ void loop() {
     sendRadio();
   }
   Serial.flush();
-  Sleepy::loseSomeTime(additionalDelay);
+  Sleepy::loseSomeTime(waitMillis);
 }
 
 void setupRadio() {
   rf12_initialize(nodeId, RF12_868MHZ, 101); // 101 = group id
-  rf12_easyInit(0);  
 }
 
 void sendRadio() {
   rf12_sleep(RF12_WAKEUP);
-  rf12_easyPoll();
-  rf12_easySend(&payload, sizeof payload); 
+  rf12_sendNow(0, &payload, sizeof payload); 
+  rf12_sendWait(2);
   rf12_sleep(RF12_SLEEP);
 }
