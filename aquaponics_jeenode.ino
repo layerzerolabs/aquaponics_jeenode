@@ -1,7 +1,10 @@
 #include <JeeLib.h>
+#include <OneWire.h>
+#include <DallasTemperature.h>
 #include "BatterySensor.h"
 #include "TempHumiSensor.h" 
 #include "LightSensor.h"
+#include "TempSensor.h"
 
 /*****************************************************
   EDIT FOR DIFFERENT COMBINATIONS OF SENSORS
@@ -19,7 +22,7 @@ Sensor* sensors[] = {
   &lightSensor,
 };
 
-int waitMillis = 10000; // between each reading process 
+int waitMillis = 3000; // between each reading process 
 
 /*****************************************************/
 
@@ -62,6 +65,7 @@ void setupRadio() {
 void sendRadio() {
   rf12_sleep(RF12_WAKEUP);
   rf12_sendNow(0, &payload, sizeof payload); 
+  Serial.flush();
   rf12_sendWait(2);
   rf12_sleep(RF12_SLEEP);
 }
