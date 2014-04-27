@@ -15,4 +15,7 @@ class TempSensor : public Sensor {
     Port jeeport;
     OneWire oneWire;
     DallasTemperature dallas;
+    DeviceAddress deviceAddress;
+    static const int resolution = 12;    // 9 bit resolution by default
+    static const int delay = 750/ (1 << (12-resolution));
 };

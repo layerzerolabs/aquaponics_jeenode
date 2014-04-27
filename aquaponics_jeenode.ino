@@ -10,21 +10,21 @@
   EDIT FOR DIFFERENT COMBINATIONS OF SENSORS
 *****************************************************/
 
-int nodeId = 26;
+int nodeId = 23;
 
 //TempHumiSensor tempHumiSensor(1); // jeeport 1
-//BatterySensor batterySensor(3);
-//LightSensor lightSensor(1, 0x39); // jeeport and I2C address
+BatterySensor batterySensor(3);
+LightSensor lightSensor(4, 0x39); // jeeport and I2C address
 TempSensor tempSensor(2);
 
 Sensor* sensors[] = {
   //&tempHumiSensor,
-  //&batterySensor,
-  //&lightSensor,
+  &batterySensor,
+  &lightSensor,
   &tempSensor
 };
 
-int waitMillis = 3000; // between each reading process 
+int waitMillis = 1000; // between each reading process 
 
 /*****************************************************/
 
