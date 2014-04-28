@@ -5,29 +5,37 @@
 #include "TempHumiSensor.h" 
 #include "LightSensor.h"
 #include "TempSensor.h"
+#include <avr/eeprom.h>
+#include <RF12.h>
 
-/*****************************************************
-  EDIT FOR DIFFERENT COMBINATIONS OF SENSORS
-*****************************************************/
+// RF12 configuration area
+typedef struct {
+    byte nodeId          ; // used by rf12_config, offset 0
+    byte group           ;  // used by rf12_config, offset 1
+    byte format          ;    // used by rf12_config, offset 2
+    byte hex_output      :2;    // 0 = dec, 1 = hex, 2 = hex+ascii
+    byte collect_mode    :1;    // 0 = ack, 1 = don't send acks
+    byte quiet_mode      :1;    // 0 = show all, 1 = show only valid packets
+    byte spare_flags     :4;
+    word frequency_offset; // used by rf12_config, offset 4
+    byte pad[RF12_EEPROM_SIZE-8];
+    word crc;
+} RF12Config;
 
-int nodeId = 23;
+// Sensor configuration area
+typedef struct {
+    byte typeId;
+    byte I2CAddress;
+} SensorConfig;
 
-//TempHumiSensor tempHumiSensor(1); // jeeport 1
-BatterySensor batterySensor(3);
-LightSensor lightSensor(4, 0x39); // jeeport and I2C address
-TempSensor tempSensor(2);
+SensorConfig sensorConfig[4];
 
-Sensor* sensors[] = {
-  //&tempHumiSensor,
-  &batterySensor,
-  &lightSensor,
-  &tempSensor
-};
+int sensorConfigEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
+
 
 int waitMillis = 1000; // between each reading process 
 
-/*****************************************************/
-
+Sensor* sensors[5];
 int payload[3]; // id and up to two readings
 
 ISR(WDT_vect) { Sleepy::watchdogEvent(); } // needed for power-down
@@ -37,6 +45,25 @@ int numSensors = sizeof(sensors) / sizeof(sensors[0]);
 
 void setup() {
   Serial.begin(9600);
+  eeprom_read_block(&sensorConfig, (void *)sensorConfigEepromAddr, sizeof sensorConfig);
+
+  // load the sensor for each port
+  for (int port = 0; port < 5; port ++) {
+   switch (sensorConfig[port].typeId) {
+      case 1: 
+       sensors[port] = new BatterySensor(port);
+       break;
+      case 2:
+       sensors[port] = new TempHumiSensor(port);
+       break;
+      case 3:
+       sensors[port] = new LightSensor(port, sensorConfig[port].I2CAddress);
+       break;
+      case 4:
+       sensors[port] = new TempSensor(port);
+       break;
+   }
+  }
   for (int i = 0; i < numSensors; i ++) {
     sensors[i]->setup(); 
   }
@@ -61,7 +88,7 @@ void loop() {
 }
 
 void setupRadio() {
-  rf12_initialize(nodeId, RF12_868MHZ, 101); // 101 = group id
+  rf12_config();
 }
 
 void sendRadio() {
