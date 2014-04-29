@@ -47,15 +47,8 @@ void setup() {
   eeprom_read_block(&sensorConfigs, (void *)sensorConfigsEepromAddr, sizeof sensorConfigs);
 
   // load a sensor instance for each used port
-  for (int index = 0; index < 4; index ++) {
-   int port = index + 1;
-   /*Serial.print("index: ");
-   Serial.println(index);
-   Serial.print("port: ");
-   Serial.println(port);
-   Serial.print("type: "); 
-   Serial.println(sensorConfigs[index].typeId); */
-   switch (sensorConfigs[index].typeId) {
+  for (int port = 0; port < 4; port ++) {
+   switch (sensorConfigs[port].typeId) {
       case 1: 
        sensors[numSensors++] = new BatterySensor(port);
        Serial.print("Battery sensor detected on port ");
@@ -107,7 +100,6 @@ void loop() {
 
 void setupRadio() {
   rf12_configSilent();
-  // rf12_initialize(23, RF12_868MHZ, 101);
 }
 
 void sendRadio() {
