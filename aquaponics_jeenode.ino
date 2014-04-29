@@ -27,7 +27,7 @@ typedef struct {
     byte I2CAddress;
 } SensorConfig;
 
-SensorConfig sensorConfigs[4];
+SensorConfig sensorConfigs[5];
 
 // Sensor config starts just after main config
 int sensorConfigsEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
@@ -47,7 +47,7 @@ void setup() {
   eeprom_read_block(&sensorConfigs, (void *)sensorConfigsEepromAddr, sizeof sensorConfigs);
 
   // load a sensor instance for each used port
-  for (int port = 0; port < 4; port ++) {
+  for (int port = 0; port <= 4; port ++) {
    switch (sensorConfigs[port].typeId) {
       case 1: 
        sensors[numSensors++] = new BatterySensor(port);
