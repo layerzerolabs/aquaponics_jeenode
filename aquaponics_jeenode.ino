@@ -107,6 +107,7 @@ void loop() {
 
 void setupRadio() {
   rf12_configSilent();
+  // rf12_initialize(23, RF12_868MHZ, 101);
 }
 
 void sendRadio() {
