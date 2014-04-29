@@ -30,6 +30,7 @@ typedef struct {
 
 SensorConfig sensorConfig[4];
 
+// Sensor config starts just after main config
 int sensorConfigEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
 
 
@@ -40,27 +41,26 @@ int payload[3]; // id and up to two readings
 
 ISR(WDT_vect) { Sleepy::watchdogEvent(); } // needed for power-down
 
-// C way for getting size of array
-int numSensors = sizeof(sensors) / sizeof(sensors[0]);
+int numSensors; // increments as array grows
 
 void setup() {
   Serial.begin(9600);
   eeprom_read_block(&sensorConfig, (void *)sensorConfigEepromAddr, sizeof sensorConfig);
 
-  // load the sensor for each port
+  // load a sensor instance for each used port
   for (int port = 0; port < 5; port ++) {
    switch (sensorConfig[port].typeId) {
       case 1: 
-       sensors[port] = new BatterySensor(port);
+       sensors[numSensors++] = new BatterySensor(port);
        break;
       case 2:
-       sensors[port] = new TempHumiSensor(port);
+       sensors[numSensors++] = new TempHumiSensor(port);
        break;
       case 3:
-       sensors[port] = new LightSensor(port, sensorConfig[port].I2CAddress);
+       sensors[numSensors++] = new LightSensor(port, sensorConfig[port].I2CAddress);
        break;
       case 4:
-       sensors[port] = new TempSensor(port);
+       sensors[numSensors++] = new TempSensor(port);
        break;
    }
   }
