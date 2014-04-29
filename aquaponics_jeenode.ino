@@ -6,7 +6,6 @@
 #include "LightSensor.h"
 #include "TempSensor.h"
 #include <avr/eeprom.h>
-#include <RF12.h>
 
 // RF12 configuration area
 typedef struct {
@@ -28,10 +27,10 @@ typedef struct {
     byte I2CAddress;
 } SensorConfig;
 
-SensorConfig sensorConfig[4];
+SensorConfig sensorConfigs[4];
 
 // Sensor config starts just after main config
-int sensorConfigEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
+int sensorConfigsEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
 
 
 int waitMillis = 1000; // between each reading process 
@@ -45,22 +44,41 @@ int numSensors; // increments as array grows
 
 void setup() {
   Serial.begin(9600);
-  eeprom_read_block(&sensorConfig, (void *)sensorConfigEepromAddr, sizeof sensorConfig);
+  eeprom_read_block(&sensorConfigs, (void *)sensorConfigsEepromAddr, sizeof sensorConfigs);
 
   // load a sensor instance for each used port
-  for (int port = 0; port < 5; port ++) {
-   switch (sensorConfig[port].typeId) {
+  for (int index = 0; index < 4; index ++) {
+   int port = index + 1;
+   /*Serial.print("index: ");
+   Serial.println(index);
+   Serial.print("port: ");
+   Serial.println(port);
+   Serial.print("type: "); 
+   Serial.println(sensorConfigs[index].typeId); */
+   switch (sensorConfigs[index].typeId) {
       case 1: 
        sensors[numSensors++] = new BatterySensor(port);
+       Serial.print("Battery sensor detected on port ");
+       Serial.println(port);
+       Serial.flush();
        break;
       case 2:
        sensors[numSensors++] = new TempHumiSensor(port);
+       Serial.print("Temp Humi sensor detected on port ");
+       Serial.println(port);
+       Serial.flush();
        break;
       case 3:
-       sensors[numSensors++] = new LightSensor(port, sensorConfig[port].I2CAddress);
+       sensors[numSensors++] = new LightSensor(port, sensorConfigs[port].I2CAddress);
+       Serial.print("Light sensor detected on port ");
+       Serial.println(port);
+       Serial.flush();
        break;
       case 4:
        sensors[numSensors++] = new TempSensor(port);
+       Serial.print("Temp sensor detected on port ");
+       Serial.println(port);
+       Serial.flush();
        break;
    }
   }
@@ -88,7 +106,7 @@ void loop() {
 }
 
 void setupRadio() {
-  rf12_config();
+  rf12_configSilent();
 }
 
 void sendRadio() {
