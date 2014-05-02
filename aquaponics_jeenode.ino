@@ -6,6 +6,8 @@
 #include "LightSensor.h"
 #include "TempSensor.h"
 #include <avr/eeprom.h>
+#include <Wire.h>
+#include "pHSensor.h"
 
 // RF12 configuration area
 typedef struct {
@@ -70,6 +72,12 @@ void setup() {
       case 4:
        sensors[numSensors++] = new TempSensor(port);
        Serial.print("Temp sensor detected on port ");
+       Serial.println(port);
+       Serial.flush();
+       break;
+      case 5:
+       sensors[numSensors++] = new pHSensor(port, sensorConfigs[port].I2CAddress);
+       Serial.print("pH sensor detected on port ");
        Serial.println(port);
        Serial.flush();
        break;
