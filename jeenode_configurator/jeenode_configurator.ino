@@ -103,8 +103,8 @@ void writeDefaultMainConfig() {
 float calcpHStep(byte port)
 {
   //RefVoltage * our deltaRawpH / 12bit steps *mV in V / OP-Amp gain /pH step difference 7-4
-  float opampGain = 4.25;
-  float vRef = 4.096;
+  float opampGain = 5.25;
+  float vRef = 3.3;
   return ((((vRef*(float)(sensorConfigs[port].pH7Cal - sensorConfigs[port].pH4Cal))/4096)*1000)/opampGain)/3;
 }
 
