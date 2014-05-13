@@ -12,6 +12,7 @@ struct parameters_T
 } 
 params;
 
+  Port powerPort = Port(3);
 const float vRef = 3.3; //Our vRef into the ADC wont be exact
                     //Since you can run VCC lower than Vref its
                     //best to measure and adjust here
@@ -23,8 +24,6 @@ pHSensor::pHSensor(byte port, int address){
 }
 
 void pHSensor::setup() {  
-  Port powerPort = Port(3);
-  powerPort.digiWrite(HIGH);
   powerPort.mode(OUTPUT);
   Wire.begin();
   params.WriteCheck = Write_Check;
@@ -49,12 +48,19 @@ void pHSensor::measure(int * data) {
 	byte adc_low;
 	//We'll assemble the 2 in this variable
 	int adc_result;
-     
+        // Turn on the sensor
+        powerPort.digiWrite(HIGH);
+        Sleepy::loseSomeTime(5000);
 	Wire.requestFrom(address, 2);        //requests 2 bytes
 	while(Wire.available() < 2);        
 	//Set em 
 	adc_high = Wire.read();           
 	adc_low = Wire.read();
+        powerPort.digiWrite(LOW); // turn it off
+        
+            // release TWI bus
+    //TWCR = _BV(TWEN) | _BV(TWIE) | _BV(TWEA) | _BV(TWINT);
+    
 	//now assemble them, remembering our byte maths a Union works well here as well
 	adc_result = (adc_high * 256) + adc_low;
 	data[0] = id;
