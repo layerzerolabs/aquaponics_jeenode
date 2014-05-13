@@ -35,7 +35,7 @@ SensorConfig sensorConfigs[5];
 int sensorConfigsEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
 
 
-int waitMillis = 1000; // between each reading process 
+int waitMillis = 10000; // between each reading process 
 
 Sensor* sensors[5];
 int payload[3]; // id and up to two readings
@@ -100,14 +100,15 @@ void loop() {
     Serial.print(payload[1]);
     Serial.print(" READING1:");
     Serial.println(payload[2]);
+    Serial.flush();
     sendRadio();
   }
-  Serial.flush();
   Sleepy::loseSomeTime(waitMillis);
 }
 
 void setupRadio() {
-  rf12_configSilent();
+  rf12_config();
+  Serial.flush(); 
 }
 
 void sendRadio() {
