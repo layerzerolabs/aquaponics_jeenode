@@ -28,15 +28,17 @@ typedef struct {
     byte typeId;
     byte I2CAddress;
     byte powerPort;
+    int pH7Cal;
+    int pH4Cal;
+    float pHStep;
 } SensorConfig;
-
 SensorConfig sensorConfigs[5];
 
 // Sensor config starts just after main config
 int sensorConfigsEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
 
 
-int waitMillis = 10000; // between each reading process 
+int waitMillis = 60000; // between each reading process 
 
 Sensor* sensors[5];
 int payload[3]; // id and up to two readings
@@ -77,7 +79,12 @@ void setup() {
        Serial.flush();
        break;
       case 5:
-       sensors[numSensors++] = new pHSensor(port, sensorConfigs[port].I2CAddress);
+        Serial.print("step: ");
+        Serial.println(sensorConfigs[port].pHStep);
+       sensors[numSensors++] = new pHSensor(
+         port, sensorConfigs[port].I2CAddress, sensorConfigs[port].powerPort,
+         sensorConfigs[port].pH7Cal, sensorConfigs[port].pH4Cal, sensorConfigs[port].pHStep
+       );
        Serial.print("pH sensor detected on port ");
        Serial.println(port);
        Serial.flush();
@@ -93,7 +100,7 @@ void setup() {
 void loop() {
   for (int i = 0; i < numSensors; i ++) {
     sensors[i]->measure(payload);
-    /*Serial.print("Sensor:");
+    Serial.print("Sensor:");
     Serial.print(sensors[i]->getName());
     Serial.print(" ID:");
     Serial.print(payload[0]);
@@ -101,7 +108,7 @@ void loop() {
     Serial.print(payload[1]);
     Serial.print(" READING1:");
     Serial.println(payload[2]);
-    Serial.flush();*/
+    Serial.flush();
     sendRadio();
   }
   Sleepy::loseSomeTime(waitMillis);

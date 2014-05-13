@@ -5,12 +5,21 @@ class pHSensor : public Sensor {
   
  public:
     static const int id = 5;
+    static const float vRef = 3.3;
+    static const float opampGain = 5.25;
     char* getName();
-    pHSensor(byte port, int address);
+    pHSensor(
+       byte port, byte address, byte powerPortNo, 
+       int pH7Cal, int pH4Cal, float pHStep
+    );
     void setup();
     void measure(int* data);
     
   private:
     float calcpH(int raw);
     int address;
+    Port powerPort;
+    int pH7Cal;
+    int pH4Cal;
+    float pHStep;
 };
