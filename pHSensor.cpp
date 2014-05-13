@@ -23,6 +23,9 @@ pHSensor::pHSensor(byte port, int address){
 }
 
 void pHSensor::setup() {  
+  Port powerPort = Port(3);
+  powerPort.digiWrite(HIGH);
+  powerPort.mode(OUTPUT);
   Wire.begin();
   params.WriteCheck = Write_Check;
   params.pH7Cal = 2048; //assume ideal probe and amp conditions 1/2 of 4096
@@ -46,9 +49,9 @@ void pHSensor::measure(int * data) {
 	byte adc_low;
 	//We'll assemble the 2 in this variable
 	int adc_result;
-  
+     
 	Wire.requestFrom(address, 2);        //requests 2 bytes
-	while(Wire.available() < 2);        //while two bytes to receive
+	while(Wire.available() < 2);        
 	//Set em 
 	adc_high = Wire.read();           
 	adc_low = Wire.read();

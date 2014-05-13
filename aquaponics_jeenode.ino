@@ -27,6 +27,7 @@ typedef struct {
 typedef struct {
     byte typeId;
     byte I2CAddress;
+    byte powerPort;
 } SensorConfig;
 
 SensorConfig sensorConfigs[5];
@@ -35,7 +36,7 @@ SensorConfig sensorConfigs[5];
 int sensorConfigsEepromAddr = (int)RF12_EEPROM_ADDR + sizeof(RF12Config);
 
 
-int waitMillis = 10000; // between each reading process 
+int waitMillis = 1000; // between each reading process 
 
 Sensor* sensors[5];
 int payload[3]; // id and up to two readings
