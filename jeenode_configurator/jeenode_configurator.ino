@@ -6,15 +6,10 @@ i<nn> Set node id (resets system)
 g     Display group
 g<nn> Set group (resets system)
 p<n>  Set the port number for subsequent commands to apply to
-t     Display sensor type
+t     Display sensor type 0-Battery sensor 5-pH
 t<n>  Set sensor type(resets system)
 a     Display sensor I2C address
 a<nn> Set I2C address of sensor (resets system)
-4     Display pH4Cal 
-4<n>  Enter reading for pH4 (resets system)
-7     Display pH7Cal 
-7<n>  Enter reading for pH7 (resets system)
-s     Calculate and set pHStep
 d     Delete config for sensor (resets system)
 */ 
 #include <avr/eeprom.h>
@@ -44,9 +39,6 @@ typedef struct {
     byte typeId;
     byte I2CAddress;
     byte powerPort;
-    int pH7Cal;
-    int pH4Cal;
-    float pHStep;
 } SensorConfig;
 
 SensorConfig sensorConfigs[5];
@@ -100,14 +92,6 @@ void writeDefaultMainConfig() {
       saveMainConfig();
 }
 
-float calcpHStep(byte port)
-{
-  //RefVoltage * our deltaRawpH / 12bit steps *mV in V / OP-Amp gain /pH step difference 7-4
-  float opampGain = 5.25;
-  float vRef = 3.3;
-  return ((((vRef*(float)(sensorConfigs[port].pH7Cal - sensorConfigs[port].pH4Cal))/4096)*1000)/opampGain)/3;
-}
-
 void setup() {
   Serial.begin(9600);
   loadMainConfig();
@@ -131,30 +115,19 @@ void setup() {
        Serial.print("Port: ");
        Serial.print(port);
        if (sensorConfigs[port].typeId != 0) {
-       Serial.print("    Sensor type: ");
-       Serial.println(sensorConfigs[port].typeId);
-       if (sensorConfigs[port].I2CAddress != 0) {
-         Serial.print("    which has I2C address of: ");
-         Serial.println(sensorConfigs[port].I2CAddress);
+         Serial.print("    Sensor type: ");
+         Serial.println(sensorConfigs[port].typeId);
+         if (sensorConfigs[port].I2CAddress != 0) {
+           Serial.print("    which has I2C address of: ");
+           Serial.println(sensorConfigs[port].I2CAddress);
+         }
+         if (sensorConfigs[port].powerPort != 0) {
+           Serial.print("    powered by port: ");
+           Serial.println(sensorConfigs[port].powerPort);
+         }
+       } else {
+         Serial.println(" *** Not Used ***");
        }
-       if (sensorConfigs[port].powerPort != 0) {
-         Serial.print("    powered by port: ");
-         Serial.println(sensorConfigs[port].powerPort);
-       }
-       if (sensorConfigs[port].pH7Cal != 0) {
-         Serial.print("    pH7Cal: ");
-         Serial.println(sensorConfigs[port].pH7Cal);
-       }
-       if (sensorConfigs[port].pH4Cal != 0) {
-         Serial.print("    pH4Cal: ");
-         Serial.println(sensorConfigs[port].pH4Cal);
-       }
-       if (sensorConfigs[port].pHStep != 0) {
-         Serial.print("    pHStep: ");
-         Serial.println(sensorConfigs[port].pHStep);
-       }
-     }
-     else Serial.println(" *** Not Used ***");
      }
      Serial.println();
   }
@@ -266,47 +239,6 @@ void runCommand() {
            savesensorConfigs();
        }
        break;
-              
-     case '7':
-       if (!param) {
-           Serial.print("Sensor on port ");
-           Serial.print(sensorPort);
-           Serial.print(" has pH7Cal value ");
-           Serial.println(sensorConfigs[sensorPort].pH7Cal);
-       } else {
-           sensorConfigs[sensorPort].pH7Cal = param;
-           Serial.print("Calibrating sensor on port ");
-           Serial.print(sensorPort);
-           Serial.print(". Reading at pH 7 = ");
-           Serial.println(sensorConfigs[sensorPort].pH7Cal);
-           savesensorConfigs();
-       }
-              
-     case '4':
-       if (!param) {
-           Serial.print("Sensor on port ");
-           Serial.print(sensorPort);
-           Serial.print(" has pH4Cal value ");
-           Serial.println(sensorConfigs[sensorPort].pH4Cal);
-       } else {
-           sensorConfigs[sensorPort].pH4Cal = param;
-           Serial.print("Calibrating sensor on port ");
-           Serial.print(sensorPort);
-           Serial.print(" Reading at pH 4 = ");
-           Serial.println(sensorConfigs[sensorPort].pH4Cal);
-           savesensorConfigs();
-       }
-       break;
-              
-     case 's':
-       if (!param) {
-           Serial.print("Calculating pH step value for sensor on port ");
-           Serial.println(sensorPort);
-           sensorConfigs[sensorPort].pHStep = calcpHStep(sensorPort);
-           Serial.print("It is now set to: ");
-           Serial.println(sensorConfigs[sensorPort].pHStep);
-           savesensorConfigs();
-       }
          
      case 'd':
          Serial.print("Deleting config for sensor on port ");
