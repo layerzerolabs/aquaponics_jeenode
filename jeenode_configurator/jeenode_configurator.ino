@@ -10,6 +10,8 @@ t     Display sensor type 0-Battery sensor 5-pH
 t<n>  Set sensor type(resets system)
 a     Display sensor I2C address
 a<nn> Set I2C address of sensor (resets system)
+v     Display sensor power port
+v<nn> Set power port of sensor (resets system)
 d     Delete config for sensor (resets system)
 */ 
 #include <avr/eeprom.h>
