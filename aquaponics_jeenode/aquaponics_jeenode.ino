@@ -28,9 +28,6 @@ typedef struct {
     byte typeId;
     byte I2CAddress;
     byte powerPort;
-    int pH7Cal;
-    int pH4Cal;
-    float pHStep;
 } SensorConfig;
 SensorConfig sensorConfigs[5];
 
@@ -79,12 +76,7 @@ void setup() {
        Serial.flush();
        break;
       case 5:
-        Serial.print("step: ");
-        Serial.println(sensorConfigs[port].pHStep);
-       sensors[numSensors++] = new pHSensor(
-         port, sensorConfigs[port].I2CAddress, sensorConfigs[port].powerPort,
-         sensorConfigs[port].pH7Cal, sensorConfigs[port].pH4Cal, sensorConfigs[port].pHStep
-       );
+       sensors[numSensors++] = new pHSensor(port, sensorConfigs[port].I2CAddress, sensorConfigs[port].powerPort);
        Serial.print("pH sensor detected on port ");
        Serial.println(port);
        Serial.flush();
