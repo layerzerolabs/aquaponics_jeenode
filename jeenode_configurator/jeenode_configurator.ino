@@ -6,7 +6,7 @@ i<nn> Set node id (resets system)
 g     Display group
 g<nn> Set group (resets system)
 p<n>  Set the port number for subsequent commands to apply to
-t     Display sensor type 0-Battery sensor 5-pH
+t     Display sensor type 1-Battery sensor 2-Temp/Humi 3-Light 4-Temp 5-pH
 t<n>  Set sensor type(resets system)
 a     Display sensor I2C address
 a<nn> Set I2C address of sensor (resets system)
