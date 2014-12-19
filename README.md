@@ -5,7 +5,7 @@ Jeenode code for wireless aquaponics sensors.
 
 code structure
 --------------
-The entire repo is intended to be uploaded to each jeenode in the system. This has a number of benefits over a more traditional approach of separate ino files for each sensor. It makes it very easy to mix and match sensors - if you want to put two or three in a box, fine, just use the jeenode_configurator to tell it what is on each port and some settings, and you're away. Then there are development benefits. One is that only on ino file needs to be maintained. Another is that it forces each sensor class to conform to a standard interface. As a result, this code is actually a primitive framework. You can add classes for additional sensors very easily.
+The entire repo (apart from the "jeenode_configurator") is intended to be uploaded to each jeenode in the system. This has a number of benefits over a more traditional approach of separate ino files for each sensor. It makes it very easy to mix and match sensors - if you want to put two or three in a box, fine, just use the jeenode_configurator to tell it what is on each port and some settings, and you're away. Then there are development benefits. One is that only on ino file needs to be maintained. Another is that it forces each sensor class to conform to a standard interface. As a result, this code is actually a primitive framework. You can add classes for additional sensors very easily.
 
 The disadvantage, of course, is upload size - but we haven't found that to be a problem.
 
